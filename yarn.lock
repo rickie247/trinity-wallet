@@ -1623,9 +1623,12 @@ iota-wallet-shared-modules@./src/shared/:
   dependencies:
     bignumber.js "^7.2.1"
     i18next "^10.2.2"
-    iota.lib.js "git+https://git@github.com/iotaledger/iota.lib.js#develop"
-    lodash "^4.17.10"
-    moment "^2.22.2"
+    i18next-browser-languagedetector "^2.1.0"
+    iota.lib.js "git+https://git@github.com/laumair/iota.lib.js#911e5e2"
+    lodash "^4.17.4"
+    lodash.concat "^4.5.0"
+    moment "^2.19.1"
+    object-hash "^1.3.0"
     proxy-polyfill "git+https://git@github.com/GoogleChrome/proxy-polyfill#9c009d7"
     react "^16.2.0"
     react-i18next "^7.3.4"
@@ -2611,6 +2614,10 @@ object-assign@^4.0.1, object-assign@^4.1.0, object-assign@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
 
+object-hash@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/object-hash/-/object-hash-1.3.0.tgz#76d9ba6ff113cf8efc0d996102851fe6723963e2"
+
 object-keys@^1.0.8:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.0.11.tgz#c54601778ad560f1142ce0e01bcca8b56d13426d"
@@ -2885,16 +2892,6 @@ prop-types@^15.6.0:
     fbjs "^0.8.16"
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
-
-proto-list@~1.2.1:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/proto-list/-/proto-list-1.2.4.tgz#212d5bfe1318306a420f6402b8e26ff39647a849"
-
-protoduck@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/protoduck/-/protoduck-5.0.0.tgz#752145e6be0ad834cb25716f670a713c860dce70"
-  dependencies:
-    genfun "^4.0.1"
 
 "proxy-polyfill@git+https://git@github.com/GoogleChrome/proxy-polyfill#9c009d7":
   version "0.2.0"

@@ -2988,9 +2988,12 @@ iota-wallet-shared-modules@../shared/:
   dependencies:
     bignumber.js "^7.2.1"
     i18next "^10.2.2"
-    iota.lib.js "^0.5.0"
-    lodash "^4.17.10"
-    moment "^2.22.2"
+    i18next-browser-languagedetector "^2.1.0"
+    iota.lib.js "git+https://git@github.com/laumair/iota.lib.js#911e5e2"
+    lodash "^4.17.4"
+    lodash.concat "^4.5.0"
+    moment "^2.19.1"
+    object-hash "^1.3.0"
     proxy-polyfill "git+https://git@github.com/GoogleChrome/proxy-polyfill#9c009d7"
     react "^16.2.0"
     react-i18next "^7.3.4"
@@ -4379,6 +4382,10 @@ object-copy@^0.1.0:
     copy-descriptor "^0.1.0"
     define-property "^0.2.5"
     kind-of "^3.0.3"
+
+object-hash@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/object-hash/-/object-hash-1.3.0.tgz#76d9ba6ff113cf8efc0d996102851fe6723963e2"
 
 object-inspect@^1.5.0:
   version "1.6.0"
