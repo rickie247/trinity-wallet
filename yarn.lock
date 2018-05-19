@@ -1621,7 +1621,8 @@ invert-kv@^1.0.0:
 iota-wallet-shared-modules@./src/shared/:
   version "0.0.0"
   dependencies:
-    bignumber.js "^7.2.1"
+    async "^2.6.0"
+    bluebird "^3.5.1"
     i18next "^10.2.2"
     i18next-browser-languagedetector "^2.1.0"
     iota.lib.js "git+https://git@github.com/laumair/iota.lib.js#911e5e2"
