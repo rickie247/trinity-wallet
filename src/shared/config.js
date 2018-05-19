@@ -43,7 +43,8 @@ export const DEFAULT_RETRIES = 4;
 export const IRI_API_VERSION = '1';
 
 export const useLegacyQuorum = true;
-export const quorumPoolSize = 5;
+export const quorumPoolSize = 12;
+export const quorumThreshold = 0.665;
 export const quorumPollFreq = 60 * 1000;
 
 // A list of nodes for the quorum system.
