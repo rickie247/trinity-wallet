@@ -25,6 +25,14 @@ const clearKeychain = () => {
     }
 };
 
+const loadGroup = (store) => {
+  const state = store.getState();
+  if (state.accounts.onboardingComplete) {
+    return registerScreens('wallet', store, Provider);
+  }
+  return registerScreens('onboarding', store, Provider);
+};
+
 const launch = (store) => {
     // Disable auto node switching.
     SwitchingConfig.autoSwitch = false;
@@ -157,7 +165,7 @@ export default (store) => {
         fetchNodeList(store);
         startListeningToConnectivityChanges(store);
 
-        registerScreens(store, Provider);
+        loadGroup(store);
         translate.setI18n(i18);
 
         launch(store);

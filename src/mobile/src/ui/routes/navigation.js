@@ -1,5 +1,8 @@
-import { Navigation } from 'react-native-navigation';
+//import { Navigation } from 'react-native-navigation';
+import { registerOnboardingScreens } from 'ui/routes/navigation-onboarding';
+import { registerWalletScreens } from 'ui/routes/navigation-wallet';
 import withSafeAreaView from 'ui/components/SafeAreaView';
+/*
 import Home from 'ui/views/wallet/Home';
 import Loading from 'ui/views/wallet/Loading';
 import NewSeedSetup from 'ui/views/onboarding/NewSeedSetup';
@@ -24,9 +27,10 @@ import TermsAndConditions from 'ui/views/onboarding/TermsAndConditions';
 import PrivacyPolicy from 'ui/views/onboarding/PrivacyPolicy';
 import ForceChangePassword from 'ui/views/wallet/ForceChangePassword';
 import SeedVaultBackupComponent from 'ui/views/onboarding/SeedVaultBackup';
+*/
 import { isIPhoneX } from 'libs/device';
 
-function getGenerator(screen) {
+export function getGenerator(screen) {
     if (isIPhoneX) {
         return withSafeAreaView(screen);
     }
@@ -34,44 +38,13 @@ function getGenerator(screen) {
     return screen;
 }
 
-export default function registerScreens(store, Provider) {
-    Navigation.registerComponent('home', () => getGenerator(Home), store, Provider);
-    Navigation.registerComponent('loading', () => getGenerator(Loading), store, Provider);
-    Navigation.registerComponent('newSeedSetup', () => getGenerator(NewSeedSetup), store, Provider);
-    Navigation.registerComponent('walletSetup', () => getGenerator(WalletSetup), store, Provider);
-    Navigation.registerComponent('enterSeed', () => getGenerator(EnterSeed), store, Provider);
-    Navigation.registerComponent('saveYourSeed', () => getGenerator(SaveYourSeed), store, Provider);
-    Navigation.registerComponent('setPassword', () => getGenerator(SetPassword), store, Provider);
-    Navigation.registerComponent('login', () => getGenerator(Login), store, Provider);
-    Navigation.registerComponent('writeSeedDown', () => getGenerator(WriteSeedDown), store, Provider);
-    Navigation.registerComponent('languageSetup', () => getGenerator(LanguageSetup), store, Provider);
-    Navigation.registerComponent('walletResetConfirm', () => getGenerator(WalletResetConfirmation), store, Provider);
-    Navigation.registerComponent(
-        'walletResetRequirePassword',
-        () => getGenerator(WalletResetRequirePassword),
-        store,
-        Provider,
-    );
-    Navigation.registerComponent('onboardingComplete', () => getGenerator(OnboardingComplete), store, Provider);
-    Navigation.registerComponent('setAccountName', () => getGenerator(SetAccountNameComponent), store, Provider);
-    Navigation.registerComponent('seedReentry', () => getGenerator(SeedReentry), store, Provider);
-    Navigation.registerComponent('saveSeedConfirmation', () => getGenerator(SaveSeedConfirmation), store, Provider);
-    Navigation.registerComponent(
-        'twoFactorSetupAddKey',
-        () => getGenerator(TwoFactorSetupAddKeyComponent),
-        store,
-        Provider,
-    );
-    Navigation.registerComponent(
-        'twoFactorSetupEnterToken',
-        () => getGenerator(TwoFactorSetupEnterToken),
-        store,
-        Provider,
-    );
-    Navigation.registerComponent('disable2FA', () => getGenerator(Disable2FA), store, Provider);
-    Navigation.registerComponent('fingerprintSetup', () => getGenerator(FingerprintSetup), store, Provider);
-    Navigation.registerComponent('termsAndConditions', () => getGenerator(TermsAndConditions), store, Provider);
-    Navigation.registerComponent('privacyPolicy', () => getGenerator(PrivacyPolicy), store, Provider);
-    Navigation.registerComponent('forceChangePassword', () => getGenerator(ForceChangePassword), store, Provider);
-    Navigation.registerComponent('seedVaultBackup', () => getGenerator(SeedVaultBackupComponent), store, Provider);
+export default function registerScreens(group, store, Provider) {
+  if (group === 'onboarding') {
+    return registerOnboardingScreens(store, Provider);
+  }
+  if (group === 'wallet') {
+    return registerWalletScreens(store, Provider);
+  }
+
+  throw new Error('Invalid group: ' + group);
 }
