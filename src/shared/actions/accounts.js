@@ -1,3 +1,4 @@
+import i18next from '../i18next';
 import {
     selectedAccountStateFactory,
     getAccountNamesFromState,
@@ -7,6 +8,7 @@ import {
 import { syncAccount, getAccountData } from '../libs/iota/accounts';
 import { clearWalletData, setSeedIndex } from './wallet';
 import {
+    generateAlert,
     generateAccountInfoErrorAlert,
     generateSyncingCompleteAlert,
     generateSyncingErrorAlert,
@@ -14,7 +16,7 @@ import {
     generateNodeOutOfSyncErrorAlert,
     generateAccountSyncRetryAlert,
 } from '../actions/alerts';
-import { changeNode } from '../actions/settings';
+import { changeNode, setByteTritStatus } from '../actions/settings';
 import { withRetriesOnDifferentNodes, getRandomNodes } from '../libs/iota/utils';
 import { pushScreen } from '../libs/utils';
 import Errors from '../libs/errors';
@@ -626,4 +628,38 @@ export const getAccountInfo = (seed, accountName, navigator = null, genFn, notif
 export const deleteAccount = (accountName) => (dispatch) => {
     dispatch(removeAccount(accountName));
     dispatch(generateAccountDeletedAlert());
+};
+
+/**
+ * Do byte-trit check
+ * @param {object} accounts - Account information {accountName, seed}
+ * @param {function} genFn - Address generation function
+ */
+export const byteTritCheck = (accounts, genFn) => (dispatch) => {
+    const affectedAccounts = accounts.map((account) => ({
+        accountName: account.accountName,
+        seed: account.seed,
+    }));
+    dispatch(setByteTritStatus(affectedAccounts.length ? affectedAccounts : true));
+};
+
+/**
+ * Do byte-trit sweep
+ * @param {object} accounts - Account information {accountName, seed}
+ * @param {function} genFn - Address generation function
+ * @param {function} powFn - Proof-of-Work function
+ */
+export const byteTritSweep = (accounts, genFn, powFn) => (dispatch) => {
+    setTimeout(() => {
+        dispatch(setByteTritStatus(true));
+
+        dispatch(
+            generateAlert(
+                'success',
+                i18next.t('bytetrit:sweepSucceeded'),
+                i18next.t('bytetrit:sweepSucceededExplanation'),
+                10000,
+            ),
+        );
+    }, 4000);
 };

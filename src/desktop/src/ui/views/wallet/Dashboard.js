@@ -9,14 +9,16 @@ import { connect } from 'react-redux';
 import { getSeed } from 'libs/crypto';
 import { capitalize } from 'libs/helpers';
 
-import { getAccountInfo } from 'actions/accounts';
+import { getAccountInfo, byteTritCheck, byteTritSweep } from 'actions/accounts';
 
 import { getSelectedAccountName } from 'selectors/accounts';
 
+import Modal from 'ui/components/modal/Modal';
 import Icon from 'ui/components/Icon';
 import List from 'ui/components/List';
 import Chart from 'ui/components/Chart';
 import Balance from 'ui/components/Balance';
+import Button from 'ui/components/Button';
 
 import Receive from 'ui/views/wallet/Receive';
 import Send from 'ui/views/wallet/Send';
@@ -33,6 +35,8 @@ class Dashboard extends React.PureComponent {
         /** @ignore */
         accountName: PropTypes.string.isRequired,
         /** @ignore */
+        accountNames: PropTypes.array.isRequired,
+        /** @ignore */
         password: PropTypes.object,
         /** @ignore */
         isDeepLinkActive: PropTypes.bool,
@@ -43,14 +47,55 @@ class Dashboard extends React.PureComponent {
             push: PropTypes.func.isRequired,
         }).isRequired,
         /** @ignore */
+        byteTritStatus: PropTypes.oneOfType([PropTypes.bool, PropTypes.array]),
+        /** @ignore */
+        byteTritCheck: PropTypes.func.isRequired,
+        /** @ignore */
+        byteTritSweep: PropTypes.func.isRequired,
+        /** @ignore */
         t: PropTypes.func.isRequired,
+    };
+
+    state = {
+        isSweeping: false,
     };
 
     componentWillMount() {
         if (this.props.isDeepLinkActive) {
             this.props.history.push('/wallet/send');
         }
+        if (!this.props.byteTritStatus) {
+            this.byteTritAction();
+        }
     }
+
+    byteTritAction = (e) => {
+        if (e) {
+            e.preventDefault();
+        }
+        const { byteTritStatus, accountNames, password } = this.props;
+
+        if (byteTritStatus) {
+            this.setState({
+                isSweeping: true,
+            });
+            return this.props.byteTritSweep(byteTritStatus, Electron.genFn, Electron.powFn);
+        }
+
+        const accounts = byteTritStatus
+            ? byteTritStatus
+            : accountNames.map(async (accountName) => {
+                  const seed = await getSeed(password, accountName);
+                  return {
+                      accountName,
+                      seed,
+                  };
+              });
+
+        Promise.all(accounts).then((accounts) => {
+            this.props.byteTritCheck(accounts, Electron.genFn);
+        });
+    };
 
     updateAccount = async () => {
         const { password, accountName } = this.props;
@@ -61,7 +106,8 @@ class Dashboard extends React.PureComponent {
     };
 
     render() {
-        const { t, history, location } = this.props;
+        const { byteTritStatus, t, history, location } = this.props;
+        const { isSweeping } = this.state;
 
         const route = location.pathname.split('/')[2] || '/';
         const subroute = location.pathname.split('/')[3] || null;
@@ -116,6 +162,20 @@ class Dashboard extends React.PureComponent {
                         <Chart />
                     </section>
                 </div>
+                {typeof byteTritStatus === 'object' ? (
+                    <Modal isOpen onClose={() => {}}>
+                        <div>
+                            <h1>{t('bytetrit:title')}</h1>
+                            <p>
+                                <strong>{byteTritStatus.map((account) => account.accountName)}</strong>{' '}
+                                {t('bytetrit:explanation')}.
+                            </p>
+                            <Button loading={isSweeping} onClick={this.byteTritAction}>
+                                {!isSweeping ? t('continue') : t('pleaseWait')}
+                            </Button>
+                        </div>
+                    </Modal>
+                ) : null}
             </div>
         );
     }
@@ -123,12 +183,16 @@ class Dashboard extends React.PureComponent {
 
 const mapStateToProps = (state) => ({
     accountName: getSelectedAccountName(state),
+    accountNames: state.accounts.accountNames,
     password: state.wallet.password,
     isDeepLinkActive: state.wallet.deepLinkActive,
+    byteTritStatus: state.settings.byteTritStatus,
 });
 
 const mapDispatchToProps = {
     getAccountInfo,
+    byteTritCheck,
+    byteTritSweep,
 };
 
 export default translate()(connect(mapStateToProps, mapDispatchToProps)(Dashboard));
