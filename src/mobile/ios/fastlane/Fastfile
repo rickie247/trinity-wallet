@@ -71,3 +71,7 @@ end
 lane :localization do
   import_localizations(source_path: './localizations/*.xliff', project: 'iotaWallet.xcodeproj')
 end
+
+lane :clean_testers do
+  clean_testflight_testers(app_identifier: 'com.iota.trinity', days_of_inactivity: 90, dry_run: true)
+end

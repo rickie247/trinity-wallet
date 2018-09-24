@@ -45,6 +45,11 @@ fastlane deploy
 fastlane localization
 ```
 
+### clean_testers
+```
+fastlane clean_testers
+```
+
 
 ----
 
